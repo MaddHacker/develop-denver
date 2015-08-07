@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+<meta charset="UTF-8">
+<title>Reappt demo - chat</title>
+
+<link type="text/css" rel="stylesheet" href="/css/client-simple.css" />
+
+<script type="text/javascript" src="/js/lib/diffusion-js-5.3.0.js"></script>
+<script type="text/javascript" src="/js/lib/jquery-2.1.3.js"></script>
+
+</head>
+<body>
+	<h2>Welcome to Reappt Chat</h2>
+	<div class="connection">
+		<span>Connection Status: </span>
+		<span id="connection-status">Disconnected</span>
+		<span class="login">Host:</span>
+		<input type="text" id="login-host" class="login" oldValue="localhost" value="favorableEnglert.eu.reappt.io" />
+		<span class="login">Port:</span>
+		<input type="text" id="login-port" class="login" oldValue="8081" value="80" />
+		<span class="login">Username:</span>
+		<input type="text" id="login-username" class="login" value="admin" />
+		<span class="login">Password:</span>
+		<input type="password" id="login-password" class="login" value="password" />
+		<input id="disconnect-button" type="button"  style="display:none;" onclick="javascript:disconnect();" value="Disconnect" />
+		<input id="connect-button" type="button"  style="display:block;" onclick="javascript:connect();" value="Connect" />
+	</div>
+	<span class="spacer">&nbsp;</span>
+	<input id="newuser-show-form-button" type="button"  onclick="javascript:showCreateAccount();" value="Create new account" />
+	<div id="newuser-form" class="" style="display:none;">
+		<span>Create new user:</span>
+		<input type="text" id="newuser-principal" class="" value="" />
+		<span>With password:</span>
+		<input type="password" id="newuser-password" class="" value="" />
+		<span>Confirm password:</span>
+		<input type="password" id="newuser-password-confirm" class="" value="" />
+		<input id="newuser-submit-button" type="button"  onclick="javascript:createAccount();" value="Create new account" />
+	</div>
+	<span class="spacer">&nbsp;</span>
+	<div id="chat-with-user" class="chatting" style="display:none;">
+		<span>Chat with:</span>
+		<input type="text" id="addchat-username" class="add-chat" value="" />
+		<input id="connect-button" type="button"  onclick="javascript:createChat();" value="Open New Chat" />
+	</div>
+	<span class="spacer">&nbsp;</span>
+	<div id="add-friend" class="chatting" style="display:none;">
+		<span>Add as friend:</span>
+		<input type="text" id="addfriend-username" class="add-friend" value="" />
+		<input id="connect-button" type="button"  onclick="javascript:createFriend();" value="Add as friend" />
+	</div>
+	<span class="spacer">&nbsp;</span>
+	<div id="friend-list">
+		<div class="friend-list-title">Friends</div>
+	</div>
+	<span class="spacer">&nbsp;</span>
+	<div id="group-list">
+		<div class="group-list-title">Chat Groups</div>
+	</div>
+	<br />
+	<div id="chat-windows"></div>
+	<br />
+	<div id="topic-data"></div>
+	<br />
+	
+	<div id="chat-window-template">
+		<div class="chat-window">
+			<span class="history"></span>
+			<textarea class="new-message"></textarea>
+			<input class="send-message-button" type="button"  onclick="javascript:sendChatMessage(this);" value="Send" />
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="/js/client-simple.js"></script>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+<meta charset="UTF-8">
+<title>Reappt demo - Develop Denver</title>
+
+<script type="text/javascript" src="/js/lib/diffusion-js-5.5.0.js"></script>
+<script type="text/javascript" src="/js/lib/jquery-2.1.3.js"></script>
+
+<style type="text/css">
+#body-color {
+	display: block;
+	font-size:80px;
+	
+}
+</style>
+
+</head>
+<body>
+	<div id="body-color">&nbsp;</div>
+</body>
+
+<script type="text/javascript">
+	diffusion.connect({
+		host : 'burningnastyGargantua.us.reappt.io',
+		port : 80,
+		ssl : true,
+	//principal : 'admin',
+	//credentials : 'password'
+	}).then(
+			function(session) {
+				console.log('Connected to Diffusion with sessionID : '
+						+ session.sessionID);
+				session.subscribe('DevelopDenver/color').on('update',
+						function(value, topic) {
+							$('body').css('background-color', value);
+							$('#body-color').text(value);
+						});
+			},
+			function(err) {
+				console.log("Error with Diffusion connection :'" + err.message
+						+ "'");
+			});
+</script>
+
+</html>

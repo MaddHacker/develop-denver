@@ -3,45 +3,189 @@
 
 <head lang="en">
 <meta charset="UTF-8">
-<title>Reappt demo - Develop Denver</title>
+<title>Reappt demo - chat</title>
 
-<script type="text/javascript" src="/js/lib/diffusion-js-5.5.0.js"></script>
+<link rel="apple-touch-icon" sizes="57x57" href="/img/favicons/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/img/favicons/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/img/favicons/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/img/favicons/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/img/favicons/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/img/favicons/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/img/favicons/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/img/favicons/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="/img/favicons/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png">
+<link rel="manifest" href="/img/favicons/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/img/favicons/favicon.ico" type="image/x-icon" />
+
+
+<link type="text/css" rel="stylesheet" href="/css/lib/reappt/jquery-ui.css">
+<link type="text/css" rel="stylesheet" href="/css/client.css" />
+<link type="text/css" rel="stylesheet" href="/css/client-jqueryui.css" />
+
+<script type="text/javascript" src="/js/lib/diffusion-js-5.3.0.js"></script>
 <script type="text/javascript" src="/js/lib/jquery-2.1.3.js"></script>
-
-<style type="text/css">
-#body-color {
-	display: block;
-	font-size:80px;
-	
-}
-</style>
+<script type="text/javascript" src="/js/lib/reappt/jquery-ui.js"></script>
 
 </head>
 <body>
-	<div id="body-color">&nbsp;</div>
+	<header>
+		<div id="tagline">
+			Welcome to <span class="blue-text">chat</span>, powered by 
+			<a href="http://reappt.io" target="_blank">
+				<span class="title-color">{</span>Re<b>app</b>t<span class="title-color">}</span>
+			</a>
+		</div>
+		<div id="connection-info">
+			<button id="connect-button" class="ui-button ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:connectDialog();">
+				<span class="ui-button-text">Connect</span>
+			</button>
+			<button id="disconnect-button" class="ui-button ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:disconnect();" style="display:none;">
+				<span class="ui-button-text">Disconnect</span>
+			</button>
+			<button id="newuser-show-form-button" class="ui-button ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:createAccountDialog();" >
+				<span class="ui-button-text">Create new account</span>
+			</button>
+		</div>
+		<span class="row">&nbsp;</span>
+		<div id="connection-details">
+			<span class="label blue-text">Connection Status:</span>
+			<span id="connection-status" class="pink-text">Disconnected</span>
+		</div>
+		<span class="row">&nbsp;</span>
+	</header>
+	<div id="main">
+		<div id="newuser-created" style="display:none;">
+			<div class="ui-state-info ui-corner-all">
+				<p>
+					<span class="ui-icon ui-icon-info"></span>
+					<span id="newuser-created-message"></span>
+				</p>
+			</div>
+		</div>
+
+		<div id="chat-with-user" class="chatting" style="display:none;">
+			<span>Chat with:</span>
+			<input type="text" id="addchat-username" class="add-chat" value="" />
+			<button id="connect-button" class="ui-button ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:createChat();" >
+				<span class="ui-button-text">Open new chat</span>
+			</button>
+		</div>
+		
+		<div id="center-content">
+			
+			<!-- Chat in tabs -->
+			<div id="chat-tabs">
+				<ul>
+					<li></li>
+				</ul>
+			</div>
+			
+			<!-- list of groups -->
+			<div id="group-list">
+				<div class="group-list-title">Chat Groups</div>
+			</div>
+		
+			<span class="row">&nbsp;</span>
+		</div>
+		
+	</div> <!-- end #main -->
+
+	<span class="row">&nbsp;</span>
+	<footer>
+		<div id="footer-info">
+			&copy;2015 <a href="http://www.pushtechnology.com" target="_blank" class="blue-text">Push Technology</a>
+		</div>
+	
+		<!-- create connection dialog -->
+		<div id="connection-dialog" class="dialog-box" title="Connect to Reappt" style="display:none;">
+			<span class="row">&nbsp;</span>
+
+			<span class="label">Username:</span>
+			<input type="text" id="login-username" value="admin" />
+			<span class="row">&nbsp;</span>
+
+			<span class="label">Password:</span>
+			<input type="password" id="login-password" value="password" />
+			<span class="row">&nbsp;</span>
+
+			<button id="do-connect-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:connect();">
+				<span class="ui-button-text">Connect</span>
+			</button>
+		</div>
+		
+		<!-- create user dialog -->
+		<div id="newuser-form" class="dialog-box" title="Create new user" style="display:none;">
+			<span class="row">&nbsp;</span>
+			<div id="newuser-info" style="display:none;">
+				<div class="ui-state-info ui-corner-all">
+					<p>
+						<span class="ui-icon ui-icon-info"></span>
+						<span id="newuser-info-message"></span>
+					</p>
+				</div>
+			</div>
+			<div id="newuser-error" style="display:none;">
+				<div class="ui-state-error ui-corner-all">
+					<p>
+						<span class="ui-icon ui-icon-alert"></span>
+						<strong>Error:</strong> <span id="newuser-error-message"></span>
+					</p>
+				</div>
+			</div>
+			<span class="row">&nbsp;</span>
+			
+			<span class="label">Username:</span>
+			<input type="text" id="newuser-principal" value="" />
+			<span class="row">&nbsp;</span>
+			
+			<span class="label">Password:</span>
+			<input type="password" id="newuser-password" value="" />
+			<span class="row">&nbsp;</span>
+			
+			<span class="label">Confirm:</span>
+			<input type="password" id="newuser-password-confirm" value="" />
+			<span class="row">&nbsp;</span>
+			
+			<button id="newuser-submit-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:createAccount();">
+				<span class="ui-button-text">Create new account</span>
+			</button>
+		</div>
+		
+		<!-- template for chats... -->
+		<div id="chat-window-template" style="display:none;">
+			<span class="history"></span>
+			<input class="new-message" />
+			<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:sendChatMessage(this);">
+				<span class="ui-button-text">Send</span>
+			</button>
+		</div>
+	</footer>
+	
+	<div style="display:none;">
+		<!-- FRIENDS HIDDEN FOR NOW -->
+		<div id="add-friend" class="chatting">
+			<span>Add as friend:</span>
+			<input type="text" id="addfriend-username" class="add-friend" value="" />
+			<button id="add-friend-button" class="ui-button ui-state-default ui-corner-all ui-button-text-only" onclick="javascript:createFriend();" >
+				<span class="ui-button-text">Add as friend</span>
+			</button>
+		</div>
+		<div id="friend-list">
+			<div class="friend-list-title">Friends</div>
+		</div>
+		<!-- END: hide friends -->
+		
+		<div id="chat-windows"></div>
+	</div>
 </body>
 
-<script type="text/javascript">
-	diffusion.connect({
-		host : 'burningnastyGargantua.us.reappt.io',
-		port : 80,
-		ssl : true,
-	//principal : 'admin',
-	//credentials : 'password'
-	}).then(
-			function(session) {
-				console.log('Connected to Diffusion with sessionID : '
-						+ session.sessionID);
-				session.subscribe('DevelopDenver/color').on('update',
-						function(value, topic) {
-							$('body').css('background-color', value);
-							$('#body-color').text(value);
-						});
-			},
-			function(err) {
-				console.log("Error with Diffusion connection :'" + err.message
-						+ "'");
-			});
-</script>
+<script type="text/javascript" src="/js/uber-js.js?files=license,strings,out,topics,reappt,connect,newuser,tabs,chat,friends,groups,onload"></script>
 
 </html>
