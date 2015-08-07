@@ -1,0 +1,22 @@
+{
+  "name": "develop-denver",
+  "version": "1.0.0",
+  "description": "develop denver hackathon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaddHacker/develop-denver"
+  },
+  "author": "Peter Hughes <peterhughes.dev@gmail.com> (http://www.peterhughesdev.co.uk/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaddHacker/develop-denver/issues"
+  },
+  "homepage": "https://github.com/MaddHacker/develop-denver",
+  "dependencies": {
+    "diffusion": "^5.5.1"
+  }
+}
