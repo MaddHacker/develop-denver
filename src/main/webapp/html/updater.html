@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+<meta charset="UTF-8">
+<title>Reappt demo - Develop Denver</title>
+
+<script type="text/javascript" src="/js/lib/diffusion-js-5.5.0.js"></script>
+<script type="text/javascript" src="/js/lib/jquery-2.1.3.js"></script>
+
+<style type="text/css">
+#body-color {
+	display: block;
+	font-size:80px;
+	margin-bottom:80px;
+}
+#update-color {
+	font-size:80px;
+	
+}
+</style>
+
+</head>
+<body>
+	<div id="body-color">&nbsp;</div>
+	<input type="text" id="update-color" />
+</body>
+
+<script type="text/javascript">
+	
+	var topicPath = 'DevelopDenver/color';
+	
+	var _session;
+	
+	diffusion.connect({
+		host : 'burningnastyGargantua.us.reappt.io',
+		port : 80,
+		ssl : true,
+		principal : 'admin',
+		credentials : 'password'
+	}).then(
+			function(session) {
+				_session = session;
+				console.log('Connected to Diffusion with sessionID : '
+						+ session.sessionID);
+				session.subscribe(topicPath).on('update',
+						function(value, topic) {
+							$('#body-color').text(value);
+						});
+				session.topics.add(topicPath, '#e25e98');
+			},
+			function(err) {
+				console.log("Error with Diffusion connection :'" + err.message
+						+ "'");
+			});
+	$('#update-color').change(function(obj){
+		console.log('update-color changed');
+		var tmpColor = $('#update-color').val();
+		console.log('updating color to: '+tmpColor);
+		_session.topics.update(topicPath, tmpColor).then(
+				function() {
+					console.log('updated topic');
+				}, function(err) {
+					console.log('updating topic failed: ' + err.message);
+				});
+	});
+</script>
+
+</html>
